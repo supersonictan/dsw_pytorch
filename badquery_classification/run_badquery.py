@@ -20,7 +20,7 @@ from odps.df import DataFrame
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 embedding_path = '/home/admin/workspace/project/embedding_SougouNews.npz'
-summary_path = './log/badquery'
+summary_path = '/home/admin/workspace/project/dsw_pytorch/badquery_classification/log'
 vocab_path = '/home/admin/workspace/project/vocab.pkl'
 term_dic_path = '/home/admin/workspace/project/term_dic.csv'
 
@@ -139,7 +139,7 @@ if __name__ == '__main__':
 
     wide_deep_model.compile(method='binary', optimizers_dic=optimizers, lr_schedulers_dic=schedulers, initializers_dic=initializers)
 
-    wide_deep_model.fit(X_wide=X_wide, X_deep=X_deep, X_text=X_text, X_text2=X_text2, target=target, n_epochs=10, batch_size=256,val_split=0.2, summary_path=summary_path)
+    wide_deep_model.fit(X_wide=X_wide, X_deep=X_deep, X_text=X_text, X_text2=X_text2, target=target, n_epochs=4, batch_size=256, val_split=0.2, summary_path=summary_path)
 
 
 
