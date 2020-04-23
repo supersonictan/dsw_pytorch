@@ -4,6 +4,7 @@ from models.DeepDense import DeepDense
 from models.TextLSTM import TextLSTM
 from models.TransformerEncoder import TransformerEncoder
 from models.Wide import Wide
+import time
 
 from models.WideDeep import WideDeep
 from optim.Initializer import KaimingNormal, XavierNormal
@@ -26,19 +27,26 @@ term_dic_path = '/home/admin/workspace/project/term_dic.csv'
 
 with_text = True
 two_text = True
+use_odps = False
 odps = ODPS('LTAI8OjacOR3fwkT', 'BQWM6tSBjBnjNEXJx3S0q3gLUHJEHK', 'ytsoku', endpoint='http://service-corp.odps.aliyun-inc.com/api')
 
 if __name__ == '__main__':
-    bExist = odps.exist_table('ads_soku_badquery_feature_lite')
-    if not bExist:
-        print("Table:{} exists:{}".format('ads_soku_badquery_feature_lite', bExist))
+    if use_odps:
+        bExist = odps.exist_table('ads_soku_badquery_feature_lite')
+        if not bExist:
+            print("Table:{} exists:{}".format('ads_soku_badquery_feature_lite', bExist))
 
-    odps_table = odps.get_table('ads_soku_badquery_feature_lite')
-    odps_df = DataFrame(odps_table.get_partition("ds='20200422'")) 
+        odps_table = odps.get_table('ads_soku_badquery_feature_lite')
+        odps_df = DataFrame(odps_table.get_partition("ds='20200422'")) 
 
-    print('before to_pandas')
-    df = odps_df.to_pandas()
-    print('after to_pandas')
+        print('before to_pandas')
+        df = odps_df.to_pandas()
+        print('after to_pandas')
+    else:
+        t_load_start = time.clock()
+        df = pd.read_csv("/home/admin/workspace/project/badquery_traindata.csv")
+        t_load_end = time.clock()
+        print('Load train data Cost: %s Seconds' % (t_load_end - t_load_start))
 
     df["term_num_bucket"] = pd.cut(df.term_num, bins=[0, 1, 3, 4, 6, 15], labels=np.arange(5))
     df["bounce_rate_bucket"] = pd.cut(df.bounce_rate, bins=[-1, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 1.1], labels=np.arange(9))
@@ -72,8 +80,11 @@ if __name__ == '__main__':
     [[ 2. 0. 2. 2. 1. -0.346393 0.31569232]
      [ 2. 1. 1. 1. 1. 0.9675134 -2.0520001]]
     """
+    t_load_start = time.clock()
     prepare_deep = DeepPreprocessor(embed_cols_list=cat_embed_cols, continuous_cols=continuous_cols)
     X_deep = prepare_deep.fit_transform(df)
+    t_load_end = time.clock()
+    print('Deep fit_transform Cost: %s Seconds' % (t_load_end - t_load_start))
 
     X_text = None
     X_text2 = None

@@ -77,7 +77,7 @@ class DeepDense(nn.Module):
         if self.embed_input is not None:
             # X所有数据 对应的 embedding
             #    embed特征_1  embed特征_2   embed特征_3
-            # x=[0,0,0,0,    0,0,0,0,      0,0,0,0]
+            # x=[0,0,0,0,    0,0,0,0,      0,0,0,0]·
             x = [
                 self.embed_layers_dic["emb_layer_" + col](X[:, self.deep_column_idx[col]].long())
                 for col, _, _ in self.embed_input

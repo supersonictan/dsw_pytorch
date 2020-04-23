@@ -270,7 +270,7 @@ class WideDeep(nn.Module):
                     writer.add_scalar("acc/train", train_acc, batch_num)
                     writer.add_scalar("acc/eval", acc_valid, batch_num)
 
-                    msg = 'Iter: {0:>6},  Train Loss: {1:>5.2},  Train Acc: {2:>6.2%},  Val Loss: {3:>5.2},  Val Acc: {4:>6.2%}'
+                    msg = 'Iter: {0:>6},  Train Loss: {1:>5.3},  Train Acc: {2:>6.3%},  Val Loss: {3:>5.3},  Val Acc: {4:>6.3%}'
                     # msg = 'Iter: {0:>6},  Train Loss: {1:>5.2},  Train Acc: {2:>6.2%}'
                     print(msg.format(batch_num, train_loss.item(), train_acc, loss_valid, acc_valid))
 
