@@ -4,6 +4,7 @@ import numpy as np
 import torch.nn.functional as F
 from torch.autograd import Variable
 import math
+import time
 
 embedding_dim = 300
 need_pretrain_embedding = False
@@ -37,7 +38,7 @@ class TransformerEncoder(nn.Module):
 
         self.position = PositionalEncoding()
 
-        encoder_layer = nn.TransformerEncoderLayer(d_model=300, nhead=5, dim_feedforward=2048)
+        encoder_layer = nn.TransformerEncoderLayer(d_model=300, nhead=5, dim_feedforward=1024)
         self.transformer_encoder = nn.TransformerEncoder(encoder_layer, num_layers=5)
 
         # self.rnn = nn.LSTM(embedding_dim, hidden_size, 2, bidirectional=True, batch_first=True, dropout=dropout)

@@ -245,6 +245,7 @@ class WideDeep(nn.Module):
             print('Epoch [{}/{}]'.format(epoch + 1, n_epochs))
 
             for batch_idx, (data, target) in enumerate(train_loader):
+                st = time.clock()
                 batch_num += 1
                 self.train()
                 X = {k: v.cuda() for k, v in data.items()} if use_cuda else data
@@ -269,10 +270,11 @@ class WideDeep(nn.Module):
                     writer.add_scalar("loss/eval", loss_valid.item(), batch_num)
                     writer.add_scalar("acc/train", train_acc, batch_num)
                     writer.add_scalar("acc/eval", acc_valid, batch_num)
+                    ed = time.clock()
 
-                    msg = 'Iter: {0:>6},  Train Loss: {1:>5.3},  Train Acc: {2:>6.3%},  Val Loss: {3:>5.3},  Val Acc: {4:>6.3%}'
+                    msg = 'Iter: {0:>6},  Train Loss: {1:>5.3},  Train Acc: {2:>6.3%},  Val Loss: {3:>5.3},  Val Acc: {4:>6.3%} Cost:{5:>3} seconds'
                     # msg = 'Iter: {0:>6},  Train Loss: {1:>5.2},  Train Acc: {2:>6.2%}'
-                    print(msg.format(batch_num, train_loss.item(), train_acc, loss_valid, acc_valid))
+                    print(msg.format(batch_num, train_loss.item(), train_acc, loss_valid, acc_valid, ed-st))
 
                 if self.lr_schedulers_dic:
                     self._lr_scheduler_step(step_location="on_batch_end")

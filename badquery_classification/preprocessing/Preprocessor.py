@@ -7,6 +7,7 @@ import numpy as np
 import pandas as pd
 import warnings
 import pickle as pkl
+import time
 
 from sklearn.preprocessing import OneHotEncoder
 from sklearn.preprocessing import StandardScaler
@@ -144,7 +145,7 @@ class DeepTextPreprocessor(BasePreprocessor):
         df_text = df.copy()[self.text_cols_list]
         # 加载词表
         self.vocab = pkl.load(open(self.vocab_path, 'rb'))
-        print("Load Vocab: " + str(self.vocab))
+        print("Finish Load Vocab ！")
         return self
 
 
@@ -170,8 +171,15 @@ class DeepTextPreprocessor(BasePreprocessor):
 
             return word2id_list
 
+        st = time.clock()
         df_list = df.copy()[self.text_cols_list].values.tolist()
+        ed = time.clock()
+        print("TextCol tolist() cost:{} seconds", ed - st)
+
+        st = time.clock()
         df_list_new = [trans_text2id(x) for x in df_list]
+        ed = time.clock()
+        print("TextCol trans_text2id() cost:{} seconds", ed - st)
 
         # print(df_list_new)
         # df_text = df.copy()[self.text_cols_list]

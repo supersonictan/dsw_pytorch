@@ -72,8 +72,11 @@ if __name__ == '__main__':
         [[0. 0. 0. 0. 1. 0. 0. 1. 0. 0. 0. 0. 1. 0. 1. 0. 0. 0. 0. 0. 1. 0. 0. 1. 0. 1. 0. 0. 1. 0. 0. 0. 0. 0. 0. 0. 0. 1. 0. 0. 0. 0.]
          [0. 0. 0. 0. 0. 1. 0. 0. 0. 1. 0. 1. 0. 0. 0. 1. 0. 0. 1. 0. 0. 0. 0. 0. 1. 0. 1. 0. 0. 0. 0. 0. 1. 0. 0. 0. 0. 0. 0. 1. 0. 0.]]
     """
+    t_load_start = time.clock()
     prepare_wide = WidePreprocessor(wide_cols=wide_cols, crossed_cols=crossed_cols)
     X_wide = prepare_wide.fit_transform(df)
+    t_load_end = time.clock()
+    print('Wide fit_transform Cost: %s Seconds' % (t_load_end - t_load_start))
 
     """
     Deep 输入
@@ -150,7 +153,7 @@ if __name__ == '__main__':
 
     wide_deep_model.compile(method='binary', optimizers_dic=optimizers, lr_schedulers_dic=schedulers, initializers_dic=initializers)
 
-    wide_deep_model.fit(X_wide=X_wide, X_deep=X_deep, X_text=X_text, X_text2=X_text2, target=target, n_epochs=4, batch_size=256, val_split=0.2, summary_path=summary_path)
+    wide_deep_model.fit(X_wide=X_wide, X_deep=X_deep, X_text=X_text, X_text2=X_text2, target=target, n_epochs=4, batch_size=512, val_split=0.2, summary_path=summary_path)
 
 
 
