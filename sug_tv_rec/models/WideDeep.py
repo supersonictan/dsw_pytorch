@@ -16,6 +16,7 @@ from torch import Tensor
 from torch.optim import Optimizer
 from torch.optim.lr_scheduler import _LRScheduler
 from torch.utils.data import DataLoader
+from sklearn.metrics import roc_auc_score
 
 from models.DeepDense import dense_layer
 from util.WideDeepUtil import _train_val_split
@@ -91,15 +92,16 @@ class WideDeep(nn.Module):
         if self.deephead:
             deepside = self.deepdense(X["deepdense"])
             if self.deeptext is not None:
-                deepside = torch.cat([deepside, self.deeptext(X["deeptext"])], axis=1)  # type: ignore
-            if self.deepimage is not None:
-                deepside = torch.cat([deepside, self.deepimage(X["deepimage"])], axis=1)  # type: ignore
+                deepside = torch.cat([deepside, self.deeptext(X["deeptext"])], axis=1)
+            
+
+            
             deepside_out = self.deephead(deepside)
             return out.add_(deepside_out)
         else:
             out.add_(self.deepdense(X["deepdense"]))
             if self.deeptext is not None:
-                print('deepdense shape:{}'.format(X["deeptext"]))
+                # print('deepdense shape:{}'.format(X["deeptext"]))
                 out_text = self.deeptext(X["deeptext"])
 
                 # print('text shape:{}'.format(out_text.shape))
@@ -263,18 +265,19 @@ class WideDeep(nn.Module):
                 train_loss = self._cal_loss_and_backprop(y_pred, y)
 
                 if batch_num % 100 == 0:
-                    train_acc = self._cal_binary_accuracy(y_pred, y)
+                    # train_acc = self._cal_binary_accuracy(y_pred, y)
+                    train_auc = self._cal_binary_accuracy(y_pred, y)
                     loss_valid, acc_valid = self._test_validation_set(eval_loader)
 
                     writer.add_scalar("loss/train", train_loss.item(), batch_num)
                     writer.add_scalar("loss/eval", loss_valid.item(), batch_num)
-                    writer.add_scalar("acc/train", train_acc, batch_num)
+                    writer.add_scalar("auc/train", train_auc, batch_num)
                     writer.add_scalar("acc/eval", acc_valid, batch_num)
                     ed = time.clock()
 
-                    msg = 'Iter: {0:>6},  Train Loss: {1:>5.3},  Train Acc: {2:>6.3%},  Val Loss: {3:>5.3},  Val Acc: {4:>6.3%} Cost:{5:>3} seconds'
+                    msg = 'Iter: {0:>6},  Train Loss: {1:>5.3},  Train AUC: {2:>6.3%},  Val Loss: {3:>5.3},  Val Acc: {4:>6.3%} Cost:{5:>3} seconds'
                     # msg = 'Iter: {0:>6},  Train Loss: {1:>5.2},  Train Acc: {2:>6.2%}'
-                    print(msg.format(batch_num, train_loss.item(), train_acc, loss_valid, acc_valid, ed-st))
+                    print(msg.format(batch_num, train_loss.item(), train_auc, loss_valid, acc_valid, ed-st))
 
                 if self.lr_schedulers_dic:
                     self._lr_scheduler_step(step_location="on_batch_end")
@@ -291,18 +294,22 @@ class WideDeep(nn.Module):
 
 
     def _cal_binary_accuracy(self, y_pred: Tensor, y_true: Tensor) -> np.ndarray:
-        if self.method == "binary":
-            y_pred_round = y_pred.round()
-            correct_count = y_pred_round.eq(y_true.view(-1, 1)).float().sum().item()
-            total_count = len(y_pred)
-            accuracy = float(correct_count) / float(total_count)
-            return np.round(accuracy, 4)
-        else:
-            y_pred_round = y_pred.round()
-            correct_count = y_pred_round.eq(y_true.view(-1, 1)).float().sum().item()
-            total_count = len(y_pred)
-            accuracy = float(correct_count) / float(total_count)
-            return np.round(accuracy, 4)
+        y_scores = y_pred.cpu().detach().numpy()
+        y_true = y_true.cpu().detach().numpy()
+        return roc_auc_score(y_true, y_scores)
+
+        # if self.method == "binary":
+        #     y_pred_round = y_pred.round()
+        #     correct_count = y_pred_round.eq(y_true.view(-1, 1)).float().sum().item()
+        #     total_count = len(y_pred)
+        #     accuracy = float(correct_count) / float(total_count)
+        #     return np.round(accuracy, 4)
+        # else:
+        #     y_pred_round = y_pred.round()
+        #     correct_count = y_pred_round.eq(y_true.view(-1, 1)).float().sum().item()
+        #     total_count = len(y_pred)
+        #     accuracy = float(correct_count) / float(total_count)
+        #     return np.round(accuracy, 4)
 
     def _cal_loss_and_backprop(self, y_pred, y_true, train_mode=True):
         loss = 0.0

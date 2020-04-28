@@ -44,13 +44,12 @@ if __name__ == '__main__':
         print('after to_pandas')
     else:
         t_load_start = time.clock()
-        df = pd.read_csv("/home/admin/workspace/project/badquery_traindata.csv")
+        df = pd.read_csv("/home/admin/workspace/project/badquery_traindata_lite.csv")
         t_load_end = time.clock()
         print('Load train data Cost: %s Seconds' % (t_load_end - t_load_start))
 
     df["term_num_bucket"] = pd.cut(df.term_num, bins=[0, 1, 3, 4, 6, 15], labels=np.arange(5))
     df["bounce_rate_bucket"] = pd.cut(df.bounce_rate, bins=[-1, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 1.1], labels=np.arange(9))
-    print(df.head())
 
     # wide 列名
     wide_cols = ["term_num_bucket", "bounce_rate_bucket", "is_ne"]
@@ -77,6 +76,7 @@ if __name__ == '__main__':
     X_wide = prepare_wide.fit_transform(df)
     t_load_end = time.clock()
     print('Wide fit_transform Cost: %s Seconds' % (t_load_end - t_load_start))
+    # print(X_wide)
 
     """
     Deep 输入
@@ -88,6 +88,7 @@ if __name__ == '__main__':
     X_deep = prepare_deep.fit_transform(df)
     t_load_end = time.clock()
     print('Deep fit_transform Cost: %s Seconds' % (t_load_end - t_load_start))
+    # print(X_deep)
 
     X_text = None
     X_text2 = None
@@ -95,6 +96,7 @@ if __name__ == '__main__':
     if with_text:
         prepare_text = DeepTextPreprocessor(text_cols_list=text_cols, pad_size=16, vocab_path=vocab_path)
         X_text = prepare_text.fit_transform(df)
+        print(X_text.dtype)
     """
     [[  66  440 4761 4761 4761 4761 4761 4761 4761 4761 4761 4761 4761 4761 4761 4761]
      [   5  440 4761 4761 4761 4761 4761 4761 4761 4761 4761 4761 4761 4761 4761 4761]]
@@ -105,6 +107,7 @@ if __name__ == '__main__':
         prepare_text2 = MultiDeepTextPreprocessor(text_cols_list=text_cols2, pad_size=20, term_dic_path=term_dic_path)
         X_text2 = prepare_text2.fit_transform(df)
 
+    print(X_text.shape)
 
     # Build model
     wide = Wide(wide_dim=X_wide.shape[1], output_dim=1)
