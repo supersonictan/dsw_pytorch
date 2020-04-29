@@ -21,6 +21,8 @@ from sklearn.metrics import roc_auc_score
 from models.DeepDense import dense_layer
 from util.WideDeepUtil import _train_val_split
 
+from sug_tv_rec.preprocessing.WideDeepDataset import WideDeepDataset
+
 use_cuda = torch.cuda.is_available()
 n_cpus = os.cpu_count()
 #n_cpus = 1
@@ -49,23 +51,25 @@ class WideDeep(nn.Module):
         self.deepimage = deepimage
         self.deephead = deephead
 
+        # self.prefix_embed_dim = 32
+        # self.sug_embed_dim = 32
+        self.prefix_embedding = nn.Embedding(96645, 32, padding_idx=0)
+        self.sug_embedding = nn.Embedding(167333, 32, padding_idx=0)
+
         if self.deephead is None:
             if head_layers is not None:
-                input_dim: int = self.deepdense.output_dim + self.deeptext.output_dim + self.deepimage.output_dim
+                input_dim: int = self.deepdense.output_dim + self.deeptext.output_dim + 64
+                # input_dim: int = self.deepdense.output_dim + self.deeptext.output_dim + self.deepimage.output_dim
                 head_layers = [input_dim] + head_layers
                 if not head_dropout:
                     head_dropout = [0.0] * (len(head_layers) - 1)
+
                 self.deephead = nn.Sequential()
                 for i in range(1, len(head_layers)):
-                    self.deephead.add_module(
-                        "head_layer_{}".format(i - 1),
-                        dense_layer(
-                            head_layers[i - 1],
-                            head_layers[i],
-                            head_dropout[i - 1],
-                            head_batchnorm,
-                        ),
+                    self.deephead.add_module("head_layer_{}".format(i - 1),
+                        dense_layer(head_layers[i - 1], head_layers[i], head_dropout[i - 1], head_batchnorm,),
                     )
+
                 self.deephead.add_module(
                     "head_out", nn.Linear(head_layers[-1], output_dim)
                 )
@@ -91,10 +95,20 @@ class WideDeep(nn.Module):
         # Deep output: either connected directly to the output neuron(s) or passed through a head first
         if self.deephead:
             deepside = self.deepdense(X["deepdense"])
+
             if self.deeptext is not None:
                 deepside = torch.cat([deepside, self.deeptext(X["deeptext"])], axis=1)
-            
 
+            prefix_embed = self.prefix_embedding(X['deepprefix'])
+            prefix_embed = prefix_embed.squeeze(dim=1)
+            sug_embed = self.sug_embedding(X['deepsug'])
+            sug_embed = sug_embed.squeeze(dim=1)
+
+            deepside = torch.cat([deepside, prefix_embed], axis=1)
+            deepside = torch.cat([deepside, sug_embed], axis=1)
+            # print(deepside.shape)
+            # print("~~~")
+            # print(prefix_embed.shape)
             
             deepside_out = self.deephead(deepside)
             return out.add_(deepside_out)
@@ -217,24 +231,12 @@ class WideDeep(nn.Module):
 
         self.batch_size = batch_size
         # 返回 WideDeepDataset 枚举类型
-        train_set, eval_set = _train_val_split(self, X_wide, X_deep, X_text, X_text2, X_img, X_train, X_val, val_split, target)
+        # train_set, eval_set = _train_val_split(self, X_wide, X_deep, X_text, X_text2, X_img, X_train, X_val, val_split, target)
+        train_set = WideDeepDataset(**X_train)
+        eval_set = WideDeepDataset(**X_val)
+
         train_loader = DataLoader(dataset=train_set, batch_size=batch_size, num_workers=n_cpus)
         eval_loader = DataLoader(dataset=eval_set, batch_size=batch_size, num_workers=n_cpus, shuffle=False)
-
-        if warm_up:
-            # warm up...
-            self._warm_up(
-                train_loader,
-                warm_epochs,
-                warm_max_lr,
-                warm_deeptext_gradual,
-                warm_deeptext_layers,
-                warm_deeptext_max_lr,
-                warm_deepimage_gradual,
-                warm_deepimage_layers,
-                warm_deepimage_max_lr,
-                warm_routine,
-            )
 
         dev_best_loss = float('inf')
         batch_num = 0  # 记录训练了第几个batch

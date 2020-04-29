@@ -1,0 +1,500 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="a19473a0-bbd1-4477-86da-b65d76a7594d" name="Default" comment="">
+      <change beforePath="$PROJECT_DIR$/badquery_classification/log/04-28_16.22/events.out.tfevents.1588062147.b20200428105302361d9a99446be000027103-68ddb66b7f-bqz89.8264.0" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/badquery_classification/log/04-28_16.23/events.out.tfevents.1588062236.b20200428105302361d9a99446be000027103-68ddb66b7f-bqz89.8485.0" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/badquery_classification/log/04-28_16.38/events.out.tfevents.1588063131.b20200428105302361d9a99446be000027103-68ddb66b7f-bqz89.8828.0" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/badquery_classification/log/04-28_16.47/events.out.tfevents.1588063635.b20200428105302361d9a99446be000027103-68ddb66b7f-bqz89.9173.0" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/badquery_classification/log/04-28_16.50/events.out.tfevents.1588063811.b20200428105302361d9a99446be000027103-68ddb66b7f-bqz89.9596.0" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/badquery_classification/log/04-28_16.50/events.out.tfevents.1588063847.b20200428105302361d9a99446be000027103-68ddb66b7f-bqz89.9752.0" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/badquery_classification/log/04-28_16.54/events.out.tfevents.1588064046.b20200428105302361d9a99446be000027103-68ddb66b7f-bqz89.10031.0" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/badquery_classification/log/04-28_17.22/events.out.tfevents.1588065744.b20200428105302361d9a99446be000027103-68ddb66b7f-bqz89.11341.0" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/badquery_classification/log/04-28_17.40/events.out.tfevents.1588066858.b20200428105302361d9a99446be000027103-68ddb66b7f-bqz89.12120.0" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/sug_tv_rec/log/04-28_20.35/events.out.tfevents.1588077347.b20200428105302361d9a99446be000027103-68ddb66b7f-bqz89.15759.0" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/sug_tv_rec/log/04-28_20.45/events.out.tfevents.1588077940.b20200428105302361d9a99446be000027103-68ddb66b7f-bqz89.16082.0" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/sug_tv_rec/log/04-28_21.03/events.out.tfevents.1588079023.b20200428105302361d9a99446be000027103-68ddb66b7f-bqz89.16640.0" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/sug_tv_rec/models/TransformerEncoder.py" afterPath="$PROJECT_DIR$/sug_tv_rec/models/TransformerEncoder.py" />
+      <change beforePath="$PROJECT_DIR$/sug_tv_rec/models/WideDeep.py" afterPath="$PROJECT_DIR$/sug_tv_rec/models/WideDeep.py" />
+      <change beforePath="$PROJECT_DIR$/sug_tv_rec/preprocessing/WideDeepDataset.py" afterPath="$PROJECT_DIR$/sug_tv_rec/preprocessing/WideDeepDataset.py" />
+      <change beforePath="$PROJECT_DIR$/sug_tv_rec/run.py" afterPath="$PROJECT_DIR$/sug_tv_rec/run.py" />
+      <change beforePath="$PROJECT_DIR$/sug_tv_rec/util/WideDeepUtil.py" afterPath="$PROJECT_DIR$/sug_tv_rec/util/WideDeepUtil.py" />
+    </list>
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="TRACKING_ENABLED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileEditorManager">
+    <splitter split-orientation="horizontal" split-proportion="0.55450237">
+      <split-first>
+        <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+          <file leaf-file-name="run.py" pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/sug_tv_rec/run.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="282">
+                  <caret line="81" column="84" lean-forward="false" selection-start-line="81" selection-start-column="75" selection-end-line="81" selection-end-column="84" />
+                  <folding>
+                    <element signature="e#0#10#0" expanded="true" />
+                    <element signature="e#1760#2561#0" expanded="false" />
+                    <element signature="e#2646#2834#0" expanded="false" />
+                    <element signature="e#3403#3665#1" expanded="false" />
+                    <element signature="e#7002#11112#0" expanded="false" />
+                    <element signature="e#7541#7803#1" expanded="false" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="DeepDense.py" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/sug_tv_rec/models/DeepDense.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="411">
+                  <caret line="30" column="41" lean-forward="true" selection-start-line="30" selection-start-column="41" selection-end-line="30" selection-end-column="41" />
+                  <folding>
+                    <element signature="e#0#46#0" expanded="true" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+        </leaf>
+      </split-first>
+      <split-second>
+        <leaf>
+          <file leaf-file-name="WideDeep.py" pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/sug_tv_rec/models/WideDeep.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="780">
+                  <caret line="52" column="0" lean-forward="true" selection-start-line="52" selection-start-column="0" selection-end-line="52" selection-end-column="0" />
+                  <folding>
+                    <element signature="e#0#15#0" expanded="true" />
+                    <element signature="e#2667#3251#0" expanded="false" />
+                    <element signature="e#13212#13963#0" expanded="false" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="TransformerEncoder.py" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/sug_tv_rec/models/TransformerEncoder.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="312">
+                  <caret line="39" column="0" lean-forward="true" selection-start-line="39" selection-start-column="0" selection-end-line="39" selection-end-column="0" />
+                  <folding>
+                    <element signature="e#0#12#0" expanded="true" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="DeepHead.py" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/sug_tv_rec/models/DeepHead.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="270">
+                  <caret line="18" column="14" lean-forward="false" selection-start-line="18" selection-start-column="6" selection-end-line="18" selection-end-column="14" />
+                  <folding>
+                    <element signature="e#0#46#0" expanded="true" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+        </leaf>
+      </split-second>
+    </splitter>
+  </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>continuous_cols = [&quot;ott_uv_norm&quot;, &quot;category_prefer&quot;]</find>
+      <find>WideDeepDataset</find>
+      <find>_train_val_split</find>
+      <find>deeptext</find>
+      <find>prefix_embedding</find>
+      <find>head_layers</find>
+    </findStrings>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/sug_tv_rec/util/WideDeepUtil.py" />
+        <option value="$PROJECT_DIR$/sug_tv_rec/preprocessing/WideDeepDataset.py" />
+        <option value="$PROJECT_DIR$/sug_tv_rec/run.py" />
+        <option value="$PROJECT_DIR$/sug_tv_rec/models/WideDeep.py" />
+        <option value="$PROJECT_DIR$/sug_tv_rec/models/TransformerEncoder.py" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectFrameBounds" extendedState="6">
+    <option name="x" value="1447" />
+    <option name="y" value="162" />
+    <option name="width" value="1907" />
+    <option name="height" value="1053" />
+  </component>
+  <component name="ProjectInspectionProfilesVisibleTreeState">
+    <entry key="Project Default">
+      <profile-state>
+        <expanded-state>
+          <State>
+            <id />
+          </State>
+        </expanded-state>
+        <selected-state>
+          <State>
+            <id>Buildout</id>
+          </State>
+        </selected-state>
+      </profile-state>
+    </entry>
+  </component>
+  <component name="ProjectView">
+    <navigator currentView="ProjectPane" proportions="" version="1">
+      <flattenPackages />
+      <showMembers />
+      <showModules />
+      <showLibraryContents />
+      <hideEmptyPackages />
+      <abbreviatePackageNames />
+      <autoscrollToSource />
+      <autoscrollFromSource />
+      <sortByType />
+      <manualOrder />
+      <foldersAlwaysOnTop value="true" />
+    </navigator>
+    <panes>
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="dsw_pytorch" type="b2602c69:ProjectViewProjectNode" />
+              <item name="dsw_pytorch" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="dsw_pytorch" type="b2602c69:ProjectViewProjectNode" />
+              <item name="dsw_pytorch" type="462c0819:PsiDirectoryNode" />
+              <item name="badquery_classification" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="dsw_pytorch" type="b2602c69:ProjectViewProjectNode" />
+              <item name="dsw_pytorch" type="462c0819:PsiDirectoryNode" />
+              <item name="badquery_classification" type="462c0819:PsiDirectoryNode" />
+              <item name="log" type="462c0819:PsiDirectoryNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
+      <pane id="Scratches" />
+      <pane id="Scope" />
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="RunManager" selected="Python.run">
+    <configuration name="DeepDense" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/sug_tv_rec/models" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="dsw_pytorch" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/sug_tv_rec/models/DeepDense.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+    </configuration>
+    <configuration name="run" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/sug_tv_rec" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="dsw_pytorch" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/sug_tv_rec/run.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+    </configuration>
+    <configuration name="Doctests in WideDeep" type="tests" factoryName="Doctests" temporary="true" nameIsGenerated="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/sug_tv_rec/models" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="dsw_pytorch" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/sug_tv_rec/models/WideDeep.py" />
+      <option name="CLASS_NAME" value="WideDeep" />
+      <option name="METHOD_NAME" value="" />
+      <option name="FOLDER_NAME" value="" />
+      <option name="TEST_TYPE" value="TEST_CLASS" />
+      <option name="PATTERN" value="" />
+      <option name="USE_PATTERN" value="false" />
+    </configuration>
+    <list size="3">
+      <item index="0" class="java.lang.String" itemvalue="Python tests.Doctests in WideDeep" />
+      <item index="1" class="java.lang.String" itemvalue="Python.run" />
+      <item index="2" class="java.lang.String" itemvalue="Python.DeepDense" />
+    </list>
+    <recent_temporary>
+      <list size="3">
+        <item index="0" class="java.lang.String" itemvalue="Python.run" />
+        <item index="1" class="java.lang.String" itemvalue="Python.DeepDense" />
+        <item index="2" class="java.lang.String" itemvalue="Python tests.Doctests in WideDeep" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="ShelveChangesManager" show_recycled="false">
+    <option name="remove_strategy" value="false" />
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="a19473a0-bbd1-4477-86da-b65d76a7594d" name="Default" comment="" />
+      <created>1588082581089</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1588082581089</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="TestHistory">
+    <history-entry file="Doctests_in_WideDeep - 2020.04.29 at 09h 50m 28s.xml">
+      <configuration name="Doctests in WideDeep" configurationId="tests" />
+    </history-entry>
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="1440" y="160" width="1920" height="1057" extended-state="6" />
+    <editor active="true" />
+    <layout>
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.18062139" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32800853" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+    </layout>
+  </component>
+  <component name="VcsContentAnnotationSettings">
+    <option name="myLimit" value="2678400000" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager />
+    <watches-manager />
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/sug_tv_rec/run.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="75">
+          <caret line="5" column="7" lean-forward="false" selection-start-line="5" selection-start-column="7" selection-end-line="5" selection-end-column="7" />
+          <folding>
+            <element signature="e#0#10#0" expanded="true" />
+            <element signature="e#1760#2561#0" expanded="false" />
+            <element signature="e#2646#2834#0" expanded="false" />
+            <element signature="e#3403#3665#1" expanded="false" />
+            <element signature="e#7002#11112#0" expanded="false" />
+            <element signature="e#7541#7803#1" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sug_tv_rec/util/WideDeepUtil.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="270">
+          <caret line="22" column="12" lean-forward="false" selection-start-line="22" selection-start-column="12" selection-end-line="22" selection-end-column="12" />
+          <folding>
+            <element signature="e#0#18#0" expanded="false" />
+            <element signature="e#827#1555#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sug_tv_rec/models/WideDeep.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="45">
+          <caret line="3" column="18" lean-forward="true" selection-start-line="3" selection-start-column="18" selection-end-line="3" selection-end-column="18" />
+          <folding>
+            <element signature="e#0#15#0" expanded="true" />
+            <element signature="e#2667#3251#0" expanded="false" />
+            <element signature="e#13212#13963#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sug_tv_rec/run.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1740">
+          <caret line="140" column="0" lean-forward="true" selection-start-line="140" selection-start-column="0" selection-end-line="140" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#10#0" expanded="true" />
+            <element signature="e#1760#2561#0" expanded="false" />
+            <element signature="e#2646#2834#0" expanded="false" />
+            <element signature="e#3403#3665#1" expanded="false" />
+            <element signature="e#7002#11112#0" expanded="false" />
+            <element signature="e#7541#7803#1" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sug_tv_rec/models/WideDeep.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1080">
+          <caret line="219" column="46" lean-forward="false" selection-start-line="219" selection-start-column="30" selection-end-line="219" selection-end-column="46" />
+          <folding>
+            <element signature="e#0#15#0" expanded="true" />
+            <element signature="e#2667#3251#0" expanded="false" />
+            <element signature="e#13212#13963#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sug_tv_rec/util/WideDeepUtil.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="60">
+          <caret line="4" column="51" lean-forward="false" selection-start-line="4" selection-start-column="51" selection-end-line="4" selection-end-column="51" />
+          <folding>
+            <element signature="e#0#18#0" expanded="false" />
+            <element signature="e#827#1555#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sug_tv_rec/run.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#10#0" expanded="true" />
+            <element signature="e#1760#2561#0" expanded="false" />
+            <element signature="e#2646#2834#0" expanded="false" />
+            <element signature="e#3403#3665#1" expanded="false" />
+            <element signature="e#7002#11112#0" expanded="false" />
+            <element signature="e#7541#7803#1" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sug_tv_rec/util/WideDeepUtil.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="169">
+          <caret line="58" column="22" lean-forward="true" selection-start-line="58" selection-start-column="22" selection-end-line="58" selection-end-column="22" />
+          <folding>
+            <element signature="e#0#18#0" expanded="false" />
+            <element signature="e#827#1555#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sug_tv_rec/preprocessing/WideDeepDataset.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="645">
+          <caret line="47" column="17" lean-forward="false" selection-start-line="47" selection-start-column="16" selection-end-line="47" selection-end-column="17" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sug_tv_rec/models/DeepHead.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="270">
+          <caret line="18" column="14" lean-forward="false" selection-start-line="18" selection-start-column="6" selection-end-line="18" selection-end-column="14" />
+          <folding>
+            <element signature="e#0#46#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sug_tv_rec/models/TransformerEncoder.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="312">
+          <caret line="39" column="0" lean-forward="true" selection-start-line="39" selection-start-column="0" selection-end-line="39" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#12#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sug_tv_rec/models/DeepDense.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="411">
+          <caret line="30" column="41" lean-forward="true" selection-start-line="30" selection-start-column="41" selection-end-line="30" selection-end-column="41" />
+          <folding>
+            <element signature="e#0#46#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sug_tv_rec/models/WideDeep.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="780">
+          <caret line="52" column="0" lean-forward="true" selection-start-line="52" selection-start-column="0" selection-end-line="52" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#15#0" expanded="true" />
+            <element signature="e#2667#3251#0" expanded="false" />
+            <element signature="e#13212#13963#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sug_tv_rec/run.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="282">
+          <caret line="81" column="84" lean-forward="false" selection-start-line="81" selection-start-column="75" selection-end-line="81" selection-end-column="84" />
+          <folding>
+            <element signature="e#0#10#0" expanded="true" />
+            <element signature="e#1760#2561#0" expanded="false" />
+            <element signature="e#2646#2834#0" expanded="false" />
+            <element signature="e#3403#3665#1" expanded="false" />
+            <element signature="e#7002#11112#0" expanded="false" />
+            <element signature="e#7541#7803#1" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+  </component>
+</project>
