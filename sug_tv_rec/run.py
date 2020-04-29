@@ -28,8 +28,8 @@ if torch.cuda.is_available():
     prefix_dic_path = '/home/admin/workspace/project/odps/bin/prefix_dic'
     sug_dic_path = '/home/admin/workspace/project/odps/bin/sug_query_dic'
     summary_path = '/home/admin/workspace/project/dsw_pytorch/sug_tv_rec/log'
-    train_data_path = "/home/admin/workspace/project/odps/bin/sug_tv_traindata.csv"
-    eval_data_path = "/home/admin/workspace/project/odps/bin/sug_tv_evaldata.csv"
+    train_data_path = "/home/admin/workspace/project/odps/bin/sug_tv_traindata_lite.csv"
+    eval_data_path = "/home/admin/workspace/project/odps/bin/sug_tv_evaldata_lite.csv"
 else:
     prefix_dic_path = '/Users/tanzhen/Desktop/code/odps/bin/prefix_dic'
     sug_dic_path = '/Users/tanzhen/Desktop/code/odps/bin/sug_query_dic'
@@ -79,9 +79,7 @@ def item2id(df: DataFrame, col_name: str, padding_size=15, vocab:dict=None):
 
 def load_traindata():
     t_load_start = time.time()
-    names = ['uid', 'prefix', 'sug', 'label', 'ott_uv_norm', 'onehot_uv', 'show_expo', 'ugc3_expo', 'is_offical_name',
-             'is_bigword', 'category', 'meizi_series', 'is_recent_online', 'category_prefer', 'onehot_category_prefer',
-             'onehot_category', 'onehot_gender', 'family_pred_gender', 'family_pred_age_level', 'seq']
+    names = 'uid','prefix','sug','label','ott_uv_norm','show_expo','ugc3_expo','is_offical_name','category','category_prefer','family_pred_gender','family_pred_age_level','seq','f0','f1','f2','f3','f4','f5','f6','f7','f8','f9','f10','f11','f12','f13','f14','f15','f16'
     df = pd.read_csv(train_data_path, sep='\t', names=names)
     t_load_end = time.time()
     print('Load train data Cost: %s Seconds' % (t_load_end - t_load_start))
@@ -99,18 +97,27 @@ def load_traindata():
     crossed_cols = [("category", "family_pred_gender")]
 
     t_load_start = time.time()
-    X_wide = np.hstack((df['onehot_gender'].str.split(' ', expand=True).astype(np.float).values,
-                        df['onehot_category_prefer'].str.split(' ', expand=True).astype(np.float).values))
-    X_wide = np.hstack((X_wide, df['onehot_category'].str.split(' ', expand=True).astype(np.float).values))
-    X_wide = np.hstack((X_wide, df['onehot_uv'].str.split(' ', expand=True).astype(np.float).values))
-    X_wide = np.hstack((X_wide, df['is_offical_name'].astype(np.float).values[:, np.newaxis]))
-    X_wide = np.hstack((X_wide, df['is_bigword'].astype(np.float).values[:, np.newaxis]))
-    X_wide = np.hstack((X_wide, df['meizi_series'].astype(np.float).values[:, np.newaxis]))
-    X_wide = np.hstack((X_wide, df['is_recent_online'].astype(np.float).values[:, np.newaxis]))
+    X_wide = df['f0'].astype(np.float).values[:, np.newaxis]
+    X_wide = np.hstack((X_wide, df['f1'].astype(np.float).values[:, np.newaxis]))
+    X_wide = np.hstack((X_wide, df['f2'].astype(np.float).values[:, np.newaxis]))
+    X_wide = np.hstack((X_wide, df['f3'].astype(np.float).values[:, np.newaxis]))
+    X_wide = np.hstack((X_wide, df['f4'].astype(np.float).values[:, np.newaxis]))
+    X_wide = np.hstack((X_wide, df['f5'].astype(np.float).values[:, np.newaxis]))
+    X_wide = np.hstack((X_wide, df['f6'].astype(np.float).values[:, np.newaxis]))
+    X_wide = np.hstack((X_wide, df['f7'].astype(np.float).values[:, np.newaxis]))
+    X_wide = np.hstack((X_wide, df['f8'].astype(np.float).values[:, np.newaxis]))
+    X_wide = np.hstack((X_wide, df['f9'].astype(np.float).values[:, np.newaxis]))
+    X_wide = np.hstack((X_wide, df['f10'].astype(np.float).values[:, np.newaxis]))
+    X_wide = np.hstack((X_wide, df['f11'].astype(np.float).values[:, np.newaxis]))
+    X_wide = np.hstack((X_wide, df['f12'].astype(np.float).values[:, np.newaxis]))
+    X_wide = np.hstack((X_wide, df['f13'].astype(np.float).values[:, np.newaxis]))
+    X_wide = np.hstack((X_wide, df['f14'].astype(np.float).values[:, np.newaxis]))
+    X_wide = np.hstack((X_wide, df['f15'].astype(np.float).values[:, np.newaxis]))
+    X_wide = np.hstack((X_wide, df['f16'].astype(np.float).values[:, np.newaxis]))
 
     t_load_end = time.time()
     print('Wide fit_transform Cost: %s Seconds' % (t_load_end - t_load_start))
-    # print(X_wide)
+    print(X_wide)
 
     # ----------------------- deep 列 -----------------------
     cat_embed_cols = [("family_pred_gender", 8), ("family_pred_age_level", 12), ("category", 8)]
@@ -120,7 +127,7 @@ def load_traindata():
     X_deep = prepare_deep.fit_transform(df)
     t_load_end = time.time()
     print('\nDeep fit_transform Cost: %s Seconds' % (t_load_end - t_load_start))
-    # print(X_deep)
+    print(X_deep)
 
     # ----------------------- prefix 列 ---------------------
     t_load_start = time.time()
@@ -131,7 +138,8 @@ def load_traindata():
     X_prefix = item2id(df, col_name='prefix', padding_size=1, vocab=vocab_prefix)
     t_load_end = time.time()
     print('Prefix Data Cost: %s Seconds' % (t_load_end - t_load_start))
-    print("X_prefix shape:" + str(X_prefix.shape))
+    print(X_prefix)
+    # print("X_prefix shape:" + str(X_prefix.shape))
 
     # ---------------------- query 列 ----------------------
     t_load_start = time.time()
@@ -142,7 +150,8 @@ def load_traindata():
     X_sug = item2id(df, col_name='sug', padding_size=1, vocab=vocab_sug)
     t_load_end = time.time()
     print('Sug Data Cost: %s Seconds' % (t_load_end - t_load_start))
-    print("X_sug shape:" + str(X_sug.shape))
+    print(X_sug)
+    # print("X_sug shape:" + str(X_sug.shape))
 
     # ----------------------- user sequence ---------------------
     t_load_start = time.time()
@@ -159,9 +168,7 @@ def load_traindata():
 
 def load_evaldata():
     t_load_start = time.time()
-    names = ['uid', 'prefix', 'sug', 'label', 'ott_uv_norm', 'onehot_uv', 'show_expo', 'ugc3_expo', 'is_offical_name',
-             'is_bigword', 'category', 'meizi_series', 'is_recent_online', 'category_prefer', 'onehot_category_prefer',
-             'onehot_category', 'onehot_gender', 'family_pred_gender', 'family_pred_age_level', 'seq']
+    names = 'uid','prefix','sug','label','ott_uv_norm','show_expo','ugc3_expo','is_offical_name','category','category_prefer','family_pred_gender','family_pred_age_level','seq','f0','f1','f2','f3','f4','f5','f6','f7','f8','f9','f10','f11','f12','f13','f14','f15','f16'
     df = pd.read_csv(eval_data_path, sep='\t', names=names)
     t_load_end = time.time()
     print('Load train data Cost: %s Seconds' % (t_load_end - t_load_start))
@@ -179,18 +186,27 @@ def load_evaldata():
     crossed_cols = [("category", "family_pred_gender")]
 
     t_load_start = time.time()
-    X_wide = np.hstack((df['onehot_gender'].str.split(' ', expand=True).astype(np.float).values,
-                        df['onehot_category_prefer'].str.split(' ', expand=True).astype(np.float).values))
-    X_wide = np.hstack((X_wide, df['onehot_category'].str.split(' ', expand=True).astype(np.float).values))
-    X_wide = np.hstack((X_wide, df['onehot_uv'].str.split(' ', expand=True).astype(np.float).values))
-    X_wide = np.hstack((X_wide, df['is_offical_name'].astype(np.float).values[:, np.newaxis]))
-    X_wide = np.hstack((X_wide, df['is_bigword'].astype(np.float).values[:, np.newaxis]))
-    X_wide = np.hstack((X_wide, df['meizi_series'].astype(np.float).values[:, np.newaxis]))
-    X_wide = np.hstack((X_wide, df['is_recent_online'].astype(np.float).values[:, np.newaxis]))
+    X_wide = df['f0'].astype(np.float).values[:, np.newaxis]
+    X_wide = np.hstack((X_wide, df['f1'].astype(np.float).values[:, np.newaxis]))
+    X_wide = np.hstack((X_wide, df['f2'].astype(np.float).values[:, np.newaxis]))
+    X_wide = np.hstack((X_wide, df['f3'].astype(np.float).values[:, np.newaxis]))
+    X_wide = np.hstack((X_wide, df['f4'].astype(np.float).values[:, np.newaxis]))
+    X_wide = np.hstack((X_wide, df['f5'].astype(np.float).values[:, np.newaxis]))
+    X_wide = np.hstack((X_wide, df['f6'].astype(np.float).values[:, np.newaxis]))
+    X_wide = np.hstack((X_wide, df['f7'].astype(np.float).values[:, np.newaxis]))
+    X_wide = np.hstack((X_wide, df['f8'].astype(np.float).values[:, np.newaxis]))
+    X_wide = np.hstack((X_wide, df['f9'].astype(np.float).values[:, np.newaxis]))
+    X_wide = np.hstack((X_wide, df['f10'].astype(np.float).values[:, np.newaxis]))
+    X_wide = np.hstack((X_wide, df['f11'].astype(np.float).values[:, np.newaxis]))
+    X_wide = np.hstack((X_wide, df['f12'].astype(np.float).values[:, np.newaxis]))
+    X_wide = np.hstack((X_wide, df['f13'].astype(np.float).values[:, np.newaxis]))
+    X_wide = np.hstack((X_wide, df['f14'].astype(np.float).values[:, np.newaxis]))
+    X_wide = np.hstack((X_wide, df['f15'].astype(np.float).values[:, np.newaxis]))
+    X_wide = np.hstack((X_wide, df['f16'].astype(np.float).values[:, np.newaxis]))
 
     t_load_end = time.time()
     print('Wide fit_transform Cost: %s Seconds' % (t_load_end - t_load_start))
-    # print(X_wide)
+    print(X_wide)
 
     # ----------------------- deep 列 -----------------------
     cat_embed_cols = [("family_pred_gender", 8), ("family_pred_age_level", 12), ("category", 8)]
@@ -200,7 +216,7 @@ def load_evaldata():
     X_deep = prepare_deep.fit_transform(df)
     t_load_end = time.time()
     print('\nDeep fit_transform Cost: %s Seconds' % (t_load_end - t_load_start))
-    # print(X_deep)
+    print(X_deep)
 
     # ----------------------- prefix 列 ---------------------
     t_load_start = time.time()

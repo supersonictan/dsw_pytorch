@@ -21,7 +21,7 @@ from sklearn.metrics import roc_auc_score
 from models.DeepDense import dense_layer
 from util.WideDeepUtil import _train_val_split
 
-from sug_tv_rec.preprocessing.WideDeepDataset import WideDeepDataset
+from preprocessing.WideDeepDataset import WideDeepDataset
 
 use_cuda = torch.cuda.is_available()
 n_cpus = os.cpu_count()
@@ -93,7 +93,7 @@ class WideDeep(nn.Module):
         # print('wide shape:{}'.format(out.shape))
 
         # Deep output: either connected directly to the output neuron(s) or passed through a head first
-        if self.deephead:
+        if not self.deephead:
             deepside = self.deepdense(X["deepdense"])
 
             if self.deeptext is not None:
@@ -111,7 +111,8 @@ class WideDeep(nn.Module):
             # print(prefix_embed.shape)
             
             deepside_out = self.deephead(deepside)
-            return out.add_(deepside_out)
+            out.add_(deepside_out)
+            return out
         else:
             out.add_(self.deepdense(X["deepdense"]))
             if self.deeptext is not None:
@@ -237,6 +238,8 @@ class WideDeep(nn.Module):
 
         train_loader = DataLoader(dataset=train_set, batch_size=batch_size, num_workers=n_cpus)
         eval_loader = DataLoader(dataset=eval_set, batch_size=batch_size, num_workers=n_cpus, shuffle=False)
+        print('~~~~~~~~')
+        print(type(eval_loader))
 
         dev_best_loss = float('inf')
         batch_num = 0  # 记录训练了第几个batch
