@@ -253,7 +253,10 @@ class WideDeep(nn.Module):
 
         dev_best_loss = float('inf')
         batch_num = 0  # 记录训练了第几个batch
-        writer = SummaryWriter(log_dir=summary_path + '/' + time.strftime('%m-%d_%H.%M', time.localtime()))
+        flag = False  # 记录是否很久没有效果提升
+        last_improve = 0  # 记录上次验证集loss下降的batch数
+        log_path = summary_path + '/' + time.strftime('%m-%d_%H.%M', time.localtime())
+        writer = SummaryWriter(log_dir=log_path)
         for epoch in range(n_epochs):
             # train step...
             epoch_logs: Dict[str, float] = {}
@@ -285,28 +288,41 @@ class WideDeep(nn.Module):
                     train_auc = self._cal_binary_accuracy(y_pred, y)
                     loss_valid, auc_valid = self._test_validation_set(eval_loader)
 
+                    if loss_valid < dev_best_loss:
+                        dev_best_loss = loss_valid
+                        torch.save(self.state_dict(), log_path)
+                        last_improve = batch_num
+
+
                     writer.add_scalar("loss/train", train_loss.item(), batch_num)
                     writer.add_scalar("loss/eval", loss_valid.item(), batch_num)
                     writer.add_scalar("auc/train", train_auc, batch_num)
-                    writer.add_scalar("acc/eval", auc_valid, batch_num)
+                    writer.add_scalar("auc/eval", auc_valid, batch_num)
                     ed = time.clock()
 
-                    msg = 'Iter: {0:>6},  Train Loss: {1:>5.3},  Train AUC: {2:>6.3%},  Val Loss: {3:>5.3},  Val Acc: {4:>6.3%} Cost:{5:>3} seconds'
+                    msg = 'Iter: {0:>6},  Train Loss: {1:>5.3},  Train AUC: {2:>6.3%},  Val Loss: {3:>5.3},  Val AUC: {4:>6.3%},  Cost:{5:>3} seconds'
                     # msg = 'Iter: {0:>6},  Train Loss: {1:>5.2},  Train Acc: {2:>6.2%}'
                     print(msg.format(batch_num, train_loss.item(), train_auc, loss_valid, auc_valid, ed-st))
+
+
+                    if batch_num - last_improve > 1000:
+                        # 验证集loss超过1000batch没下降，结束训练
+                        print("No optimization for a long time, auto-stopping...")
+                        flag = True
+                        break
 
                 if self.lr_schedulers_dic:
                     self._lr_scheduler_step(step_location="on_batch_end")
 
             if self.lr_schedulers_dic:
                 self._lr_scheduler_step(step_location="on_epoch_end")
-            # if self.early_stop:
-            #     self.callback_container.on_train_end(epoch_logs)
-            #     break
-            # self.callback_container.on_train_end(epoch_logs)
+
+            if flag:
+                break
 
         writer.close()
         self.train()
+        self.load_model_and_test()
 
 
     def _cal_binary_accuracy(self, y_pred: Tensor, y_true: Tensor) -> np.ndarray:
@@ -399,6 +415,19 @@ class WideDeep(nn.Module):
         auc = auc / len(eval_loader)
         # acc = metrics.accuracy_score(labels_all, predict_all)
         return loss_valid, auc
+
+    def load_model_and_test(self, eval_loader, save_path):
+        # test
+        st = time.time()
+        self.load_state_dict(torch.load(save_path))
+        ed = time.time()
+        print("Load model Cost:{5:>3} seconds", (ed - st))
+
+        self.eval()
+        loss_valid, auc_valid = self._test_validation_set(eval_loader)
+        print("Load model Val Loss: {3:>5.3},  Val AUC: {4:>6.3%}", loss_valid, auc_valid)
+
+
 
 
 
