@@ -6,7 +6,7 @@ from torch.autograd import Variable
 import math
 import time
 
-embedding_dim = 300
+embedding_dim = 32
 need_pretrain_embedding = False
 pad_size = 16
 dropout = 0.5
@@ -33,12 +33,12 @@ class TransformerEncoder(nn.Module):
             PRE_TRAIN_WORD_EMBEDDING = torch.tensor(np.load(pre_train_embed_path)["embeddings"].astype('float32'))
             self.embedding = nn.Embedding.from_pretrained(PRE_TRAIN_WORD_EMBEDDING, freeze=False)
         else:
-            self.embedding = nn.Embedding(176561, embedding_dim, padding_idx=0)
+            self.embedding = nn.Embedding(180000, embedding_dim, padding_idx=0)
             # TODO: init embedding
 
         self.position = PositionalEncoding()
 
-        encoder_layer = nn.TransformerEncoderLayer(d_model=300, nhead=5, dim_feedforward=512)
+        encoder_layer = nn.TransformerEncoderLayer(d_model=embedding_dim, nhead=4, dim_feedforward=512)
         self.transformer_encoder = nn.TransformerEncoder(encoder_layer, num_layers=5)
 
         # self.rnn = nn.LSTM(embedding_dim, hidden_size, 2, bidirectional=True, batch_first=True, dropout=dropout)
@@ -47,6 +47,7 @@ class TransformerEncoder(nn.Module):
 
 
     def forward(self, X):
+        
         embed = self.embedding(X)
         # print('embed shape:{}'.format(embed.shape))
 
@@ -72,7 +73,7 @@ class TransformerEncoder(nn.Module):
 
 
 class PositionalEncoding(nn.Module):
-    def __init__(self, d_model = 300, dropout = 0.2, max_len=5000):
+    def __init__(self, d_model = 32, dropout = 0.2, max_len=5000):
         super(PositionalEncoding, self).__init__()
         self.dropout = nn.Dropout(p=dropout)
 

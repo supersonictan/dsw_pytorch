@@ -28,8 +28,8 @@ if torch.cuda.is_available():
     prefix_dic_path = '/home/admin/workspace/project/odps/bin/prefix_dic'
     sug_dic_path = '/home/admin/workspace/project/odps/bin/sug_query_dic'
     summary_path = '/home/admin/workspace/project/dsw_pytorch/sug_tv_rec/log'
-    train_data_path = "/home/admin/workspace/project/odps/bin/sug_tv_traindata_lite.csv"
-    eval_data_path = "/home/admin/workspace/project/odps/bin/sug_tv_evaldata_lite.csv"
+    train_data_path = "/home/admin/workspace/project/odps/bin/sug_tv_traindata.csv"
+    eval_data_path = "/home/admin/workspace/project/odps/bin/sug_tv_evaldata.csv"
 else:
     prefix_dic_path = '/Users/tanzhen/Desktop/code/odps/bin/prefix_dic'
     sug_dic_path = '/Users/tanzhen/Desktop/code/odps/bin/sug_query_dic'
@@ -117,7 +117,7 @@ def load_traindata():
 
     t_load_end = time.time()
     print('Wide fit_transform Cost: %s Seconds' % (t_load_end - t_load_start))
-    print(X_wide)
+    # print(X_wide)
 
     # ----------------------- deep 列 -----------------------
     cat_embed_cols = [("family_pred_gender", 8), ("family_pred_age_level", 12), ("category", 8)]
@@ -127,7 +127,7 @@ def load_traindata():
     X_deep = prepare_deep.fit_transform(df)
     t_load_end = time.time()
     print('\nDeep fit_transform Cost: %s Seconds' % (t_load_end - t_load_start))
-    print(X_deep)
+    # print(X_deep)
 
     # ----------------------- prefix 列 ---------------------
     t_load_start = time.time()
@@ -138,7 +138,7 @@ def load_traindata():
     X_prefix = item2id(df, col_name='prefix', padding_size=1, vocab=vocab_prefix)
     t_load_end = time.time()
     print('Prefix Data Cost: %s Seconds' % (t_load_end - t_load_start))
-    print(X_prefix)
+    # print(X_prefix)
     # print("X_prefix shape:" + str(X_prefix.shape))
 
     # ---------------------- query 列 ----------------------
@@ -150,7 +150,7 @@ def load_traindata():
     X_sug = item2id(df, col_name='sug', padding_size=1, vocab=vocab_sug)
     t_load_end = time.time()
     print('Sug Data Cost: %s Seconds' % (t_load_end - t_load_start))
-    print(X_sug)
+    # print(X_sug)
     # print("X_sug shape:" + str(X_sug.shape))
 
     # ----------------------- user sequence ---------------------
@@ -206,7 +206,7 @@ def load_evaldata():
 
     t_load_end = time.time()
     print('Wide fit_transform Cost: %s Seconds' % (t_load_end - t_load_start))
-    print(X_wide)
+    # print(X_wide)
 
     # ----------------------- deep 列 -----------------------
     cat_embed_cols = [("family_pred_gender", 8), ("family_pred_age_level", 12), ("category", 8)]
@@ -216,7 +216,7 @@ def load_evaldata():
     X_deep = prepare_deep.fit_transform(df)
     t_load_end = time.time()
     print('\nDeep fit_transform Cost: %s Seconds' % (t_load_end - t_load_start))
-    print(X_deep)
+    # print(X_deep)
 
     # ----------------------- prefix 列 ---------------------
     t_load_start = time.time()
@@ -253,6 +253,8 @@ def load_evaldata():
     return X_wide, X_deep, prepare_deep, X_seq, X_prefix, X_sug, target
 
 
+use_head = True
+
 if __name__ == '__main__':
 
     X_wide, X_deep, prepare_deep, X_seq, X_prefix, X_sug, target = load_traindata()
@@ -265,27 +267,36 @@ if __name__ == '__main__':
     deepdense = DeepDense(hidden_layers=[64, 32], dropout=[0.2, 0.2], deep_column_idx=prepare_deep.deep_column_idx, embed_input=prepare_deep.emb_col_val_dim_tuple, continuous_cols=continuous_cols)
     transformer = TransformerEncoder()
 
-    # wide_deep_model = WideDeep(wide=wide, deepdense=deepdense, deeptext=transformer)
-    wide_deep_model = WideDeep(wide=wide, deepdense=deepdense, deeptext=transformer, head_layers=[256,64])
+    if use_head:
+        wide_deep_model = WideDeep(wide=wide, deepdense=deepdense, deeptext=transformer, head_layers=[256,64])
+    else:
+        wide_deep_model = WideDeep(wide=wide, deepdense=deepdense, deeptext=transformer)
 
     # 1.设定 optimizer ==> 2.Init 子 model 各层种参数 ==> 3.StepLR
     wide_opt = torch.optim.Adam(wide_deep_model.wide.parameters())
     deep_opt = RAdam(wide_deep_model.deepdense.parameters())
     text_opt = torch.optim.Adam(wide_deep_model.deeptext.parameters())
     prefix_opt = torch.optim.Adam(wide_deep_model.prefix_embedding.parameters())
-    sug_opt = torch.optim.Adam(wide_deep_model.sug_embedding.parameters())
-    deephead_opt = torch.optim.Adam(wide_deep_model.deephead.parameters())
+    # sug_opt = torch.optim.Adam(wide_deep_model.sug_embedding.parameters())
+    if use_head:
+        deephead_opt = torch.optim.Adam(wide_deep_model.deephead.parameters())
 
     wide_sch = torch.optim.lr_scheduler.StepLR(wide_opt, step_size=3)
     deep_sch = torch.optim.lr_scheduler.StepLR(deep_opt, step_size=5)
     text_sch = torch.optim.lr_scheduler.StepLR(text_opt, step_size=5)
     prefix_sch = torch.optim.lr_scheduler.StepLR(prefix_opt, step_size=5)
-    sug_sch = torch.optim.lr_scheduler.StepLR(sug_opt, step_size=5)
-    deephead_sch = torch.optim.lr_scheduler.StepLR(deephead_opt, step_size=5)
+    # sug_sch = torch.optim.lr_scheduler.StepLR(sug_opt, step_size=5)
+    if use_head:
+        deephead_sch = torch.optim.lr_scheduler.StepLR(deephead_opt, step_size=5)
 
-    optimizers = {"wide": wide_opt, "deepdense": deep_opt, 'deeptext': text_opt, "prefix_embedding": prefix_opt, "sug_embedding":sug_opt, "deephead":deephead_opt}
-    schedulers = {"wide": wide_sch, "deepdense": deep_sch, 'deeptext': text_sch, "prefix_embedding": prefix_sch, "sug_embedding":sug_sch, "deephead":deephead_sch}
-    initializers = {"wide": KaimingNormal, "deepdense": XavierNormal, 'deeptext': KaimingNormal, "prefix_embedding": KaimingNormal, "sug_embedding":KaimingNormal, "deephead":KaimingNormal}
+    if use_head:
+        optimizers = {"wide": wide_opt, "deepdense": deep_opt, 'deeptext': text_opt, "prefix_embedding": prefix_opt, "deephead":deephead_opt}
+        schedulers = {"wide": wide_sch, "deepdense": deep_sch, 'deeptext': text_sch, "prefix_embedding": prefix_sch, "deephead":deephead_sch}
+        initializers = {"wide": KaimingNormal, "deepdense": XavierNormal, 'deeptext': KaimingNormal, "prefix_embedding": KaimingNormal, "deephead":KaimingNormal}
+    else:
+        optimizers = {"wide": wide_opt, "deepdense": deep_opt, 'deeptext': text_opt, "prefix_embedding": prefix_opt}
+        schedulers = {"wide": wide_sch, "deepdense": deep_sch, 'deeptext': text_sch, "prefix_embedding": prefix_sch}
+        initializers = {"wide": KaimingNormal, "deepdense": XavierNormal, 'deeptext': KaimingNormal, "prefix_embedding": KaimingNormal}
 
     X_train = {"X_wide": X_wide, "X_deep": X_deep, "X_text": X_seq, "X_prefix": X_prefix, "X_sug":X_sug, "target": target}
     X_val = {"X_wide": X_eval_wide, "X_deep": X_eval_deep, "X_text": X_eval_seq, "X_prefix": X_eval_prefix, "X_sug":X_eval_sug, "target": eval_target}
@@ -293,6 +304,6 @@ if __name__ == '__main__':
     wide_deep_model.compile(method='binary', optimizers_dic=optimizers, lr_schedulers_dic=schedulers, initializers_dic=initializers)
 
     # wide_deep_model.fit(X_wide=X_wide, X_deep=X_deep, X_text=X_seq, target=target, n_epochs=4, batch_size=512, val_split=0.2, summary_path=summary_path)
-    wide_deep_model.fit(X_train=X_train, X_val=X_val, n_epochs=4, batch_size=512, val_split=0.2, summary_path=summary_path)
+    wide_deep_model.fit(X_train=X_train, X_val=X_val, n_epochs=3, batch_size=512, val_split=0.2, summary_path=summary_path)
 
 

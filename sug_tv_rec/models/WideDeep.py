@@ -53,8 +53,8 @@ class WideDeep(nn.Module):
 
         # self.prefix_embed_dim = 32
         # self.sug_embed_dim = 32
-        self.prefix_embedding = nn.Embedding(96645, 32, padding_idx=0)
-        self.sug_embedding = nn.Embedding(167333, 32, padding_idx=0)
+        self.prefix_embedding = nn.Embedding(105000, 32, padding_idx=0)
+        # self.sug_embedding = nn.Embedding(180000, 32, padding_idx=0)
 
         if self.deephead is None:
             if head_layers is not None:
@@ -93,15 +93,18 @@ class WideDeep(nn.Module):
         # print('wide shape:{}'.format(out.shape))
 
         # Deep output: either connected directly to the output neuron(s) or passed through a head first
-        if not self.deephead:
+        if self.deephead:
             deepside = self.deepdense(X["deepdense"])
 
             if self.deeptext is not None:
                 deepside = torch.cat([deepside, self.deeptext(X["deeptext"])], axis=1)
 
             prefix_embed = self.prefix_embedding(X['deepprefix'])
+            # print(deepside)
             prefix_embed = prefix_embed.squeeze(dim=1)
-            sug_embed = self.sug_embedding(X['deepsug'])
+            
+            sug_embed = self.deeptext.embedding(X['deepsug'])
+            # sug_embed = self.sug_embedding(X['deepsug'])
             sug_embed = sug_embed.squeeze(dim=1)
 
             deepside = torch.cat([deepside, prefix_embed], axis=1)
@@ -111,10 +114,15 @@ class WideDeep(nn.Module):
             # print(prefix_embed.shape)
             
             deepside_out = self.deephead(deepside)
+
             out.add_(deepside_out)
+
+            # print(out)
             return out
         else:
-            out.add_(self.deepdense(X["deepdense"]))
+            deepside = self.deepdense(X["deepdense"])
+            # print(deepside)
+            out.add_(deepside)
             if self.deeptext is not None:
                 # print('deepdense shape:{}'.format(X["deeptext"]))
                 out_text = self.deeptext(X["deeptext"])
@@ -129,6 +137,8 @@ class WideDeep(nn.Module):
 
             if self.deepimage is not None:
                 out.add_(self.deepimage(X["deepimage"]))
+            
+            # print(out)
             return out
 
     # 设置训练时用的参数
@@ -238,8 +248,8 @@ class WideDeep(nn.Module):
 
         train_loader = DataLoader(dataset=train_set, batch_size=batch_size, num_workers=n_cpus)
         eval_loader = DataLoader(dataset=eval_set, batch_size=batch_size, num_workers=n_cpus, shuffle=False)
-        print('~~~~~~~~')
-        print(type(eval_loader))
+        # print('~~~~~~~~')
+        # print(type(eval_loader))
 
         dev_best_loss = float('inf')
         batch_num = 0  # 记录训练了第几个batch
@@ -264,7 +274,8 @@ class WideDeep(nn.Module):
                     op.zero_grad()
 
                 # 预测值
-                y_pred = self._activation_fn(self.forward(X))
+                y_tmp = self.forward(X)
+                y_pred = self._activation_fn(y_tmp)
 
                 # cal loss and accurate
                 train_loss = self._cal_loss_and_backprop(y_pred, y)
@@ -272,17 +283,17 @@ class WideDeep(nn.Module):
                 if batch_num % 100 == 0:
                     # train_acc = self._cal_binary_accuracy(y_pred, y)
                     train_auc = self._cal_binary_accuracy(y_pred, y)
-                    loss_valid, acc_valid = self._test_validation_set(eval_loader)
+                    loss_valid, auc_valid = self._test_validation_set(eval_loader)
 
                     writer.add_scalar("loss/train", train_loss.item(), batch_num)
                     writer.add_scalar("loss/eval", loss_valid.item(), batch_num)
                     writer.add_scalar("auc/train", train_auc, batch_num)
-                    writer.add_scalar("acc/eval", acc_valid, batch_num)
+                    writer.add_scalar("acc/eval", auc_valid, batch_num)
                     ed = time.clock()
 
                     msg = 'Iter: {0:>6},  Train Loss: {1:>5.3},  Train AUC: {2:>6.3%},  Val Loss: {3:>5.3},  Val Acc: {4:>6.3%} Cost:{5:>3} seconds'
                     # msg = 'Iter: {0:>6},  Train Loss: {1:>5.2},  Train Acc: {2:>6.2%}'
-                    print(msg.format(batch_num, train_loss.item(), train_auc, loss_valid, acc_valid, ed-st))
+                    print(msg.format(batch_num, train_loss.item(), train_auc, loss_valid, auc_valid, ed-st))
 
                 if self.lr_schedulers_dic:
                     self._lr_scheduler_step(step_location="on_batch_end")
@@ -359,9 +370,8 @@ class WideDeep(nn.Module):
     def _test_validation_set(self, eval_loader):
         self.eval()
         loss_total = 0
-        correct_count_total = 0.0
-        predict_all = np.array([], dtype=int)
-        labels_all = np.array([], dtype=int)
+
+        auc = 0.0
 
         with torch.no_grad():
             for batch_idx, (data, target) in enumerate(eval_loader):
@@ -375,17 +385,20 @@ class WideDeep(nn.Module):
                 loss = self._cal_loss_and_backprop(y_pred, y, train_mode=False)
                 loss_total += loss
 
-                y_pred_round = y_pred.round()
-                predic = y_pred_round.data.cpu().numpy()
+                y_scores = y_pred.data.cpu().numpy()
+                y_true = y.data.cpu().numpy()
+                auc += roc_auc_score(y_true, y_scores)
+                # y_pred_round = y_pred.round()
+                # predic = y_pred_round.data.cpu().numpy()
 
-                labels = y.data.cpu().numpy()
-                labels_all = np.append(labels_all, labels)
-                predict_all = np.append(predict_all, predic)
-                # correct_count_total += y_pred_round.eq(y.view(-1, 1)).float().sum().item()
+                # labels = y.data.cpu().numpy()
+                # labels_all = np.append(labels_all, labels)
+                # predict_all = np.append(predict_all, predic)
 
         loss_valid = loss_total / len(eval_loader)
-        acc = metrics.accuracy_score(labels_all, predict_all)
-        return loss_valid, acc
+        auc = auc / len(eval_loader)
+        # acc = metrics.accuracy_score(labels_all, predict_all)
+        return loss_valid, auc
 
 
 
