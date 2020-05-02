@@ -290,7 +290,7 @@ class WideDeep(nn.Module):
 
                     if loss_valid < dev_best_loss:
                         dev_best_loss = loss_valid
-                        torch.save(self.state_dict(), log_path)
+                        torch.save(self.state_dict(), log_path + '/sug_saved_model.ckpt')
                         last_improve = batch_num
 
 
@@ -300,12 +300,12 @@ class WideDeep(nn.Module):
                     writer.add_scalar("auc/eval", auc_valid, batch_num)
                     ed = time.clock()
 
-                    msg = 'Iter: {0:>6},  Train Loss: {1:>5.3},  Train AUC: {2:>6.3%},  Val Loss: {3:>5.3},  Val AUC: {4:>6.3%},  Cost:{5:>3} seconds'
+                    msg = 'Iter: {0:>6},  Train Loss: {1:>5.3},  Train AUC: {2:>5.3},  Val Loss: {3:>5.3},  Val AUC: {4:>5.3},  Cost:{5:>3} seconds'
                     # msg = 'Iter: {0:>6},  Train Loss: {1:>5.2},  Train Acc: {2:>6.2%}'
-                    print(msg.format(batch_num, train_loss.item(), train_auc, loss_valid, auc_valid, ed-st))
+                    print(msg.format(batch_num, train_loss.item(), train_auc, loss_valid, auc_valid, round(ed-st, 2)))
 
 
-                    if batch_num - last_improve > 1000:
+                    if batch_num - last_improve > 1500:
                         # 验证集loss超过1000batch没下降，结束训练
                         print("No optimization for a long time, auto-stopping...")
                         flag = True
@@ -322,7 +322,7 @@ class WideDeep(nn.Module):
 
         writer.close()
         self.train()
-        self.load_model_and_test()
+        self.load_model_and_test(eval_loader, log_path + '/sug_saved_model.ckpt')
 
 
     def _cal_binary_accuracy(self, y_pred: Tensor, y_true: Tensor) -> np.ndarray:
@@ -421,11 +421,11 @@ class WideDeep(nn.Module):
         st = time.time()
         self.load_state_dict(torch.load(save_path))
         ed = time.time()
-        print("Load model Cost:{5:>3} seconds", (ed - st))
+        print("Load model Cost:{0:>3} seconds".format((ed - st)))
 
         self.eval()
         loss_valid, auc_valid = self._test_validation_set(eval_loader)
-        print("Load model Val Loss: {3:>5.3},  Val AUC: {4:>6.3%}", loss_valid, auc_valid)
+        print("Load model Val Loss: {0:>5.3},  Val AUC: {1:>5.3}".format(loss_valid, auc_valid))
 
 
 
