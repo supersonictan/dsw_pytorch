@@ -50,6 +50,7 @@ class WideDeep(nn.Module):
         self.deeptext2 = deeptext2
         self.deepimage = deepimage
         self.deephead = deephead
+        self.model_path = ''
 
         # self.prefix_embed_dim = 32
         # self.sug_embed_dim = 32
@@ -256,6 +257,7 @@ class WideDeep(nn.Module):
         flag = False  # 记录是否很久没有效果提升
         last_improve = 0  # 记录上次验证集loss下降的batch数
         log_path = summary_path + '/' + time.strftime('%m-%d_%H.%M', time.localtime())
+        self.model_path = log_path + '/sug_saved_model.pt'
         writer = SummaryWriter(log_dir=log_path)
         for epoch in range(n_epochs):
             # train step...
@@ -290,7 +292,7 @@ class WideDeep(nn.Module):
 
                     if loss_valid < dev_best_loss:
                         dev_best_loss = loss_valid
-                        torch.save(self.state_dict(), log_path + '/sug_saved_model.ckpt')
+                        torch.save(self.state_dict(), self.model_path)
                         last_improve = batch_num
 
 
@@ -305,7 +307,7 @@ class WideDeep(nn.Module):
                     print(msg.format(batch_num, train_loss.item(), train_auc, loss_valid, auc_valid, round(ed-st, 2)))
 
 
-                    if batch_num - last_improve > 1500:
+                    if batch_num - last_improve > 1000:
                         # 验证集loss超过1000batch没下降，结束训练
                         print("No optimization for a long time, auto-stopping...")
                         flag = True
@@ -322,7 +324,7 @@ class WideDeep(nn.Module):
 
         writer.close()
         self.train()
-        self.load_model_and_test(eval_loader, log_path + '/sug_saved_model.ckpt')
+        # self.load_model_and_test(eval_loader, log_path + '/sug_saved_model.ckpt')
 
 
     def _cal_binary_accuracy(self, y_pred: Tensor, y_true: Tensor) -> np.ndarray:

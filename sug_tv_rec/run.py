@@ -13,8 +13,12 @@ from preprocessing.Preprocessor import WidePreprocessor, DeepPreprocessor, DeepT
 
 import numpy as np
 import pandas as pd
-import torch
+import torch, os
+from torch.utils.data import DataLoader
 import time
+import torch
+from preprocessing.WideDeepDataset import WideDeepDataset
+
 # from odps import ODPS
 # from odps.df import DataFrame
 # import common_io
@@ -127,7 +131,7 @@ def load_traindata():
     X_deep = prepare_deep.fit_transform(df)
     t_load_end = time.time()
     print('\nDeep fit_transform Cost: %s Seconds' % (t_load_end - t_load_start))
-    # print(X_deep)
+    print(X_deep)
 
     # ----------------------- prefix 列 ---------------------
     t_load_start = time.time()
@@ -138,7 +142,7 @@ def load_traindata():
     X_prefix = item2id(df, col_name='prefix', padding_size=1, vocab=vocab_prefix)
     t_load_end = time.time()
     print('Prefix Data Cost: %s Seconds' % (t_load_end - t_load_start))
-    # print(X_prefix)
+    print(X_prefix.dtype)
     # print("X_prefix shape:" + str(X_prefix.shape))
 
     # ---------------------- query 列 ----------------------
@@ -150,7 +154,7 @@ def load_traindata():
     X_sug = item2id(df, col_name='sug', padding_size=1, vocab=vocab_sug)
     t_load_end = time.time()
     print('Sug Data Cost: %s Seconds' % (t_load_end - t_load_start))
-    # print(X_sug)
+    print(X_sug.dtype)
     # print("X_sug shape:" + str(X_sug.shape))
 
     # ----------------------- user sequence ---------------------
@@ -158,7 +162,7 @@ def load_traindata():
     X_seq = get_sequence_idx(df, col_name='seq', padding_size=15, vocab=vocab_sug)
     t_load_end = time.time()
     print('\nSug Data Cost: %s Seconds' % (t_load_end - t_load_start))
-    # print(X_seq)
+    print(X_seq.dtype)
 
     target = "label"
     target = df[target].values
@@ -256,7 +260,6 @@ def load_evaldata():
 use_head = True
 
 if __name__ == '__main__':
-
     X_wide, X_deep, prepare_deep, X_seq, X_prefix, X_sug, target = load_traindata()
     print("----------------------------- Start Load eval Data")
     X_eval_wide, X_eval_deep, prepare_eval_deep, X_eval_seq, X_eval_prefix, X_eval_sug, eval_target = load_evaldata()
@@ -264,7 +267,13 @@ if __name__ == '__main__':
     # Build model
     continuous_cols = ["ott_uv_norm", "category_prefer"]
     wide = Wide(wide_dim=X_wide.shape[1], output_dim=1)
+    print("### X_wide.shape[1]:{}".format(X_wide.shape[1]))
+
     deepdense = DeepDense(hidden_layers=[64, 32], dropout=[0.2, 0.2], deep_column_idx=prepare_deep.deep_column_idx, embed_input=prepare_deep.emb_col_val_dim_tuple, continuous_cols=continuous_cols)
+    print("### prepare_deep.deep_column_idx:{}".format(prepare_deep.deep_column_idx))
+    print("### prepare_deep.emb_col_val_dim_tuple:{}".format(prepare_deep.emb_col_val_dim_tuple))
+    print("### continuous_cols:{}".format(continuous_cols))
+    
     transformer = TransformerEncoder()
 
     if use_head:
@@ -305,5 +314,3 @@ if __name__ == '__main__':
 
     # wide_deep_model.fit(X_wide=X_wide, X_deep=X_deep, X_text=X_seq, target=target, n_epochs=4, batch_size=512, val_split=0.2, summary_path=summary_path)
     wide_deep_model.fit(X_train=X_train, X_val=X_val, n_epochs=3, batch_size=512, val_split=0.2, summary_path=summary_path)
-
-
