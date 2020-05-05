@@ -22,6 +22,7 @@ from preprocessing.WideDeepDataset import WideDeepDataset
 # from odps import ODPS
 # from odps.df import DataFrame
 # import common_io
+from sug_tv_rec.models.DNNAttr import DNNAttr
 
 UNK, PAD = '<UNK>', '<PAD>'  # 未知字，padding符号
 prefix_pad_size = 6
@@ -274,7 +275,8 @@ if __name__ == '__main__':
     print("### prepare_deep.emb_col_val_dim_tuple:{}".format(prepare_deep.emb_col_val_dim_tuple))
     print("### continuous_cols:{}".format(continuous_cols))
     
-    transformer = TransformerEncoder()
+    # transformer = TransformerEncoder()
+    transformer = DNNAttr()
 
     if use_head:
         wide_deep_model = WideDeep(wide=wide, deepdense=deepdense, deeptext=transformer, head_layers=[256,64])

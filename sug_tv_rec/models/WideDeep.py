@@ -98,9 +98,11 @@ class WideDeep(nn.Module):
             deepside = self.deepdense(X["deepdense"])
 
             if self.deeptext is not None:
-                deepside = torch.cat([deepside, self.deeptext(X["deeptext"])], axis=1)
+                query_embed = self.deeptext.embedding(X['deepsug'])
+                deepside = torch.cat([deepside, self.deeptext(X["deeptext"], query_embed)], axis=1)
 
             prefix_embed = self.prefix_embedding(X['deepprefix'])
+
             # print(deepside)
             prefix_embed = prefix_embed.squeeze(dim=1)
             
