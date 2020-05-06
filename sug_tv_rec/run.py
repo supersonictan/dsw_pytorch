@@ -22,7 +22,7 @@ from preprocessing.WideDeepDataset import WideDeepDataset
 # from odps import ODPS
 # from odps.df import DataFrame
 # import common_io
-from sug_tv_rec.models.DNNAttr import DNNAttr
+from models.DNNAttr import DNNAttr
 
 UNK, PAD = '<UNK>', '<PAD>'  # 未知字，padding符号
 prefix_pad_size = 6

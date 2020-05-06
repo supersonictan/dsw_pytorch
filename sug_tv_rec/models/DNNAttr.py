@@ -42,16 +42,17 @@ class DNNAttr(nn.Module):
         # embedded = embedded.permute(1, 0, 2)
 
         # 沿着seq_len维度 句子进行平均此话  得到句子的平局词向量 [batch_size,1,embed_size]>>>[batch_Size,embed_Size]
+        # https://blog.csdn.net/qq_29678299/article/details/103102397
         # size=[512, 32]
         pooled = F.avg_pool2d(embedded, (embedded.shape[1], 1)).squeeze()
-        print("pooled.shape:" + str(pooled.shape))
+        # print("pooled.shape:" + str(pooled.shape))
 
         M = self.tanh1(pooled)
-        print("M.shape:" + str(M.shape))
+        # print("M.shape:" + str(M.shape))
 
         # X_query_embed:[512, 1, 32] --> [512, 32]
         X_query_embed = X_query_embed.squeeze()
-        print("X_query_embed.shape:" + str(X_query_embed.shape))
+        # print("X_query_embed.shape:" + str(X_query_embed.shape))
 
         # [512, 32]
         alpha = F.softmax(torch.mul(M, X_query_embed), dim=1)
