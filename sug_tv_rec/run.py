@@ -270,7 +270,7 @@ if __name__ == '__main__':
     wide = Wide(wide_dim=X_wide.shape[1], output_dim=1)
     print("### X_wide.shape[1]:{}".format(X_wide.shape[1]))
 
-    deepdense = DeepDense(hidden_layers=[64, 32], dropout=[0.2, 0.2], deep_column_idx=prepare_deep.deep_column_idx, embed_input=prepare_deep.emb_col_val_dim_tuple, continuous_cols=continuous_cols)
+    deepdense = DeepDense(hidden_layers=[32], dropout=[0.2], deep_column_idx=prepare_deep.deep_column_idx, embed_input=prepare_deep.emb_col_val_dim_tuple, continuous_cols=continuous_cols)
     print("### prepare_deep.deep_column_idx:{}".format(prepare_deep.deep_column_idx))
     print("### prepare_deep.emb_col_val_dim_tuple:{}".format(prepare_deep.emb_col_val_dim_tuple))
     print("### continuous_cols:{}".format(continuous_cols))
@@ -279,7 +279,7 @@ if __name__ == '__main__':
     transformer = DNNAttr()
 
     if use_head:
-        wide_deep_model = WideDeep(wide=wide, deepdense=deepdense, deeptext=transformer, head_layers=[256,64])
+        wide_deep_model = WideDeep(wide=wide, deepdense=deepdense, deeptext=transformer, head_layers=[128])
     else:
         wide_deep_model = WideDeep(wide=wide, deepdense=deepdense, deeptext=transformer)
 
