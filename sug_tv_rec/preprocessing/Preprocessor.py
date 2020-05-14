@@ -52,10 +52,10 @@ def label_encoder(df_inp:pd.DataFrame, cols:Optional[List[str]]=None, val_to_idx
     for k, v in val_to_idx.items():
         df[k] = df[k].apply(lambda x: v[x])
 
-    print("\nlabel_encoder info:")
-    for k, v in val_to_idx.items():
-        print("\nkey={}:".format(k))
-        print(v)
+    # print("\nlabel_encoder info:")
+    # for k, v in val_to_idx.items():
+    #     print("\nkey={}:".format(k))
+    #     print(v)
     return df, val_to_idx
 
 

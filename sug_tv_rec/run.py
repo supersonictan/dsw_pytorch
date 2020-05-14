@@ -132,7 +132,7 @@ def load_traindata():
     X_deep = prepare_deep.fit_transform(df)
     t_load_end = time.time()
     print('\nDeep fit_transform Cost: %s Seconds' % (t_load_end - t_load_start))
-    print(X_deep)
+    # print(X_deep)
 
     # ----------------------- prefix 列 ---------------------
     t_load_start = time.time()

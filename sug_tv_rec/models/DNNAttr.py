@@ -23,7 +23,7 @@ class DNNAttr(nn.Module):
         super(DNNAttr, self).__init__()
         self.output_dim = num_classes
 
-        self.embedding = nn.Embedding(180000, embedding_dim, padding_idx=0)
+        self.embedding = nn.Embedding(142710, embedding_dim, padding_idx=0)
 
         self.tanh1 = nn.Tanh()
 

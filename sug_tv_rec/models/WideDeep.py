@@ -54,7 +54,7 @@ class WideDeep(nn.Module):
 
         # self.prefix_embed_dim = 32
         # self.sug_embed_dim = 32
-        self.prefix_embedding = nn.Embedding(105000, 32, padding_idx=0)
+        self.prefix_embedding = nn.Embedding(85175, 32, padding_idx=0)
         # self.sug_embedding = nn.Embedding(180000, 32, padding_idx=0)
 
         if self.deephead is None:
@@ -302,14 +302,18 @@ class WideDeep(nn.Module):
                     writer.add_scalar("loss/eval", loss_valid.item(), batch_num)
                     writer.add_scalar("auc/train", train_auc, batch_num)
                     writer.add_scalar("auc/eval", auc_valid, batch_num)
+
+                    for name, param in self.named_parameters():
+                        writer.add_histogram(name + '_grad', param.grad, batch_num)
+                        writer.add_histogram(name + '_data', param, batch_num)
+                    
                     ed = time.clock()
 
                     msg = 'Iter: {0:>6},  Train Loss: {1:>5.3},  Train AUC: {2:>5.3},  Val Loss: {3:>5.3},  Val AUC: {4:>5.3},  Cost:{5:>3} seconds'
                     # msg = 'Iter: {0:>6},  Train Loss: {1:>5.2},  Train Acc: {2:>6.2%}'
                     print(msg.format(batch_num, train_loss.item(), train_auc, loss_valid, auc_valid, round(ed-st, 2)))
 
-
-                    if batch_num - last_improve > 1000:
+                    if batch_num - last_improve > 1500:
                         # 验证集loss超过1000batch没下降，结束训练
                         print("No optimization for a long time, auto-stopping...")
                         flag = True
